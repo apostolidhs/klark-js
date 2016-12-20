@@ -1,0 +1,22 @@
+{
+  "name": "klark-js",
+  "version": "1.0.0",
+  "description": "Plugin dependency injection system for nodejs applications",
+  "main": "index",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apostolidhs/klark-js.git"
+  },
+  "keywords": [],
+  "author": "John Apostolidis <john.apostolidi@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apostolidhs/klark-js/issues"
+  },
+  "homepage": "https://github.com/apostolidhs/klark-js#readme",
+  "dependencies": {
+    "globby": "^6.1.0",
+    "lodash": "^4.17.2"
+  }
+}

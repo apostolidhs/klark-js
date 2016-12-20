@@ -2,7 +2,7 @@
 
 'use strict';
 
-klarkModule(module, 'normalPluginsPlugin1', () => {
+klarkModule(module, 'normalPluginsPlugin1', ($lodash) => {
   return {
     log: 'plugin1'
   };
