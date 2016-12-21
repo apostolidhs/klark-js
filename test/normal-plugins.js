@@ -2,21 +2,22 @@
 
 var expect = require('chai').expect;
 var path = require('path');
+var _ = require('lodash');
+
 var klark = require('../index');
+var expectPrms = require('./utilities/expect-promise');
 
 describe('Normal plugins', function() {
 
-  it('a normal user create account', function(cb) {
-    klark.run({
+  it('Should instantiate the normal-plugins application', function(cb) {
+    var klarkPrms = klark.run({
       predicateFilePicker: function() {
-        var modules = `test/normal-plugins/**/index.js`;
-        var subModules = `test/normal-plugins/**/*.module.js`;
+        var modules = `test/samples/normal-plugins/**/index.js`;
+        var subModules = `test/samples/normal-plugins/**/*.module.js`;
         return [modules, subModules];
-      },
-      base: path.join(__dirname, '../')
-    })
-    .then(function() { cb(); })
-    .catch(function(reason) { cb(reason); });      
+      }
+    });  
+    expectPrms.success(klarkPrms, _.noop, cb);          
   });
 
 });

@@ -4,7 +4,8 @@
   "description": "Plugin dependency injection system for nodejs applications",
   "main": "index",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha"
+    "test": "node node_modules/mocha/bin/mocha",
+    "coverage": "./node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha test"
   },
   "repository": {
     "type": "git",
@@ -17,10 +18,13 @@
     "url": "https://github.com/apostolidhs/klark-js/issues"
   },
   "homepage": "https://github.com/apostolidhs/klark-js#readme",
-  "dependencies": {
-    "chai": "^3.5.0",
+  "dependencies": {    
     "globby": "^6.1.0",
-    "lodash": "^4.17.2",
+    "lodash": "^4.17.2"    
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "chai": "^3.5.0",
     "mocha": "^3.2.0"
   }
 }
