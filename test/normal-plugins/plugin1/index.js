@@ -1,8 +1,6 @@
-/* jshint esversion:6, node:true  */
-
 'use strict';
 
-klarkModule(module, 'normalPluginsPlugin1', ($lodash) => {
+klarkModule(module, 'normalPluginsPlugin1', function($lodash) {
   return {
     log: 'plugin1'
   };

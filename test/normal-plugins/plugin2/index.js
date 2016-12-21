@@ -1,8 +1,6 @@
-/* jshint esversion:6, node:true  */
-
 'use strict';
 
-klarkModule(module, 'normalPluginsPlugin2', ($globby, normalPluginsPlugin1) => {
+klarkModule(module, 'normalPluginsPlugin2', function($globby, normalPluginsPlugin1) {
   
   return {
     log: 'plugin2',
