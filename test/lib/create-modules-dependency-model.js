@@ -10,12 +10,12 @@ var createModulesDependencyModel = require('../../lib/create-modules-dependency-
 
 describe('Create modules dependency model', function() {
   it('Should reject on invalid parameters', function(cb) {
-    expectPrms.invalidParameters(createModulesDependencyModel(), cb);
+    expectPrms.invalidParameters(createModulesDependencyModel.create(), cb);
   });
 
   it('Should create empty structures on empty argument', function(cb) {
     expectPrms.success(
-      createModulesDependencyModel([]), function(modulesDependencyModel) {
+      createModulesDependencyModel.create([]), function(modulesDependencyModel) {
         expect(modulesDependencyModel.internalDependencyNamesGraph).to.deep.equal({});
         expect(modulesDependencyModel.internalDependencies).to.deep.equal({});
         expect(modulesDependencyModel.externalDependencies).to.deep.equal({});
@@ -26,7 +26,7 @@ describe('Create modules dependency model', function() {
 
   it('Should create a valid modulesDependencyModel', function(cb) {
     expectPrms.success(
-      createModulesDependencyModel(instanceFactory.getModulesModel()), function(modulesDependencyModel) {
+      createModulesDependencyModel.create(instanceFactory.getModulesModel()), function(modulesDependencyModel) {
         expect(modulesDependencyModel.internalDependencyNamesGraph).to.deep.equal({
           inner1: [],
           inner2: ['inner1']
@@ -42,7 +42,7 @@ describe('Create modules dependency model', function() {
 
   it('Should fail on duplicate module name', function(cb) {
     expectPrms.fail(
-      createModulesDependencyModel(instanceFactory.getDuplicatedModulesModel()), function(reason) {
+      createModulesDependencyModel.create(instanceFactory.getDuplicatedModulesModel()), function(reason) {
         expect(reason + '').to.contain('Module duplication');
       },
       cb

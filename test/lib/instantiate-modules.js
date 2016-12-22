@@ -9,14 +9,14 @@ var instantiateModules = require('../../lib/instantiate-modules');
 
 describe('Instantiate modules', function() {
   it('Should reject on invalid parameters', function(cb) {
-    expectPrms.invalidParameters(instantiateModules(), cb);
+    expectPrms.invalidParameters(instantiateModules.instantiate(), cb);
   });
 
   it('Should successfully instantiate the modules', function(cb) {
     expectPrms.success(
-      instantiateModules(instanceFactory.getModulesDependencyModel()), function(ModulesModelInstance) {
-        var internal = ModulesModelInstance.internalDependencies;
-        expect(ModulesModelInstance.externalDependencies['lodash']).to.equal(_);
+      instantiateModules.instantiate(instanceFactory.getModulesDependencyModel()), function(modulesModelInstance) {
+        var internal = modulesModelInstance.internalDependencies;
+        expect(modulesModelInstance.externalDependencies['lodash']).to.equal(_);
         expect(internal['inner1'].instance).to.deep.equal({
           args: [_],
           name: 'inner1'
