@@ -60,13 +60,64 @@ function getDuplicatedModulesModel() {
 function getModulesDependencyModel() {
   return {
     internalDependencyNamesGraph: {
-
+      inner1: [],
+      inner3: ['inner1', 'inner2'],
+      inner2: ['inner1']
     },
     internalDependencies: {
-
+      inner1: {
+        controller: function($lodash) {
+          return {
+            args: [].slice.call(arguments),
+            name: 'inner1'
+          };
+        },
+        dependencies: [
+          {
+            isExternal: true,
+            name: 'lodash'
+          }
+        ],
+        name: 'inner1'
+      },
+      inner2: {
+        controller: function(inner1) {
+          return {
+            args: [].slice.call(arguments),
+            name: 'inner2'
+          };
+        },
+        dependencies: [
+          {
+            isExternal: false,
+            name: 'inner1'
+          }
+        ],
+        name: 'inner2'
+      },
+      inner3: {
+        controller: function(inner1, inner2) {
+          return {
+            args: [].slice.call(arguments),
+            name: 'inner3'
+          };
+        },
+        dependencies: [
+          {
+            isExternal: false,
+            name: 'inner1'
+          },
+          {
+            isExternal: false,
+            name: 'inner2'
+          }
+        ],
+        name: 'inner3'
+      }
     },
     externalDependencies: {
-
-    }
+      lodash: true
+    },
+    sortedInnerModules: ['inner3', 'inner2', 'inner1']
   };
 }
