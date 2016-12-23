@@ -84,8 +84,8 @@ describe('Normal plugins', function() {
   function runKlarkOnSamples() {
     return klark.run({
       predicateFilePicker: function() {
-        var modules = `test/samples/normal-plugins/**/index.js`;
-        var subModules = `test/samples/normal-plugins/**/*.module.js`;
+        var modules = 'test/samples/normal-plugins/**/index.js';
+        var subModules = 'test/samples/normal-plugins/**/*.module.js';
         return [modules, subModules];
       }
     });

@@ -18,13 +18,14 @@
     "url": "https://github.com/apostolidhs/klark-js/issues"
   },
   "homepage": "https://github.com/apostolidhs/klark-js#readme",
-  "dependencies": {    
+  "dependencies": {
     "globby": "^6.1.0",
-    "lodash": "^4.17.2"    
+    "lodash": "^4.17.2",
+    "promise": "^7.1.1"
   },
   "devDependencies": {
-    "istanbul": "^0.4.5",
     "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0"
   }
 }
