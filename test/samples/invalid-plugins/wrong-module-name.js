@@ -1,5 +1,5 @@
 'use strict';
 
-klarkModule(module, 'name with space', function () {
-  
+KlarkModule(module, 'name with space', function () {
+
 });

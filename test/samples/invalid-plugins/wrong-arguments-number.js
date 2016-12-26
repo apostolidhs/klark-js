@@ -1,3 +1,3 @@
 'use strict';
 
-klarkModule(22);
+KlarkModule(22);
