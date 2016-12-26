@@ -34,6 +34,7 @@ We inspired from 2 main tools:
         - [injectInternalModuleFromFilepath\(filepath\)](#injectinternalmodulefromfilepathfilepath)
         - [injectExternalModule\(name\)](#injectexternalmodulename)
         - [getApplicationDependenciesGraph\(\)](#getapplicationdependenciesgraph)
+- [Unit Tests](#unit-tests)
 - [KlarkJS Development](#klarkjs-development)
 - [References](#references)
 
@@ -243,7 +244,7 @@ Starts the Klark engine. Briefly, it loads the files, creates the modules depend
 
 #### config
 
-* `predicateFilePicker`, `Function -> Array<string>`. A function that returns the file path patterns that the modules are located. Default:
+* `predicateFilePicker`, `Function -> Array<string>`. A function that returns the file path patterns that the modules are located. [Read more about the file patterns](https://github.com/sindresorhus/globby#globbing-patterns). Default:
 ```javascript
 predicateFilePicker: function() {
   return [
@@ -340,6 +341,47 @@ Returns the internal and external dependencies of the application's modules in a
         }
     ]
 }
+```
+
+## Unit Tests
+
+From the bibliography, there are many ways to structure the unit testing process. We will Follow a common used pattern that works fine on a large-scale source code tree. We will try to test each plugin separately. In order to accomplish the isolated testing, we will create at least one testing file on each plugin. For instance, our `/plugins/db/mongoose-connector/` folder could consists from the following files:
+
+* `index.js`, that contains the functionality of mongoose-connector.
+* `index-test.js`, that tests the `index.js` functionality.
+
+Example of `index-test.js`:
+
+```javascript
+var $$dbMongooseConnector;
+var $$_;
+var expect;
+
+KlarkModule(module, 'dbMongooseConnectorTest', function($chai, $_, dbMongooseConnector) {
+  $$dbMongooseConnector = dbMongooseConnector;
+  $$_ = $_;
+  expect = $chai.expect;
+});
+
+describe('dbMongooseConnector', function() {
+    it('Should provide a connect function', function() {
+        expect($$_.isFunction(dbMongooseConnector.connect)).to.equal(true);
+    });
+});
+```
+
+For consistency all the unit testing files should postfixed by the `-test` name. If we follow the above pattern, we can easily modify the KlarkJS `predicateFilePicker` (@see [config](#config)), to exclude the `-test` files when we run the application, and include the `-test` files when we are testing the application.
+
+```javascript
+klark.run({
+    predicateFilePicker: function() {
+        var files = ['plugins/**/index.js'];
+        if (isTesting) {
+            files.concat('plugins/**/*-test.js');
+        }
+        return files;
+    }
+});
 ```
 
 ## KlarkJS Development
