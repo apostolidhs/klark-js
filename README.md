@@ -2,9 +2,9 @@
 
 A package management system based on Plugins and dependency injection for NodeJS applications.
 
-KlarkJS is a novel system for NodeJS module managment that handles the creation of the modules, resolve their internal and external dependencies, and provide them to other modules.
+KlarkJS is a novel system for NodeJS module dependency management that handles the creation of the modules, resolves their internal and external dependencies, and provides them to other modules.
 
-It works with dependency injection based on function parameters in order to define the components dependencies. This architecture decreases dramatically the boiler plate code of an ordinary node js application.
+It works with dependency injection based on function parameters in order to define the components dependencies. This architecture decreases dramatically the boiler plate code of an ordinary NodeJS application.
 
 We inspired from 2 main tools:
 
@@ -21,11 +21,15 @@ We inspired from 2 main tools:
     - [KlarkJS implementation](#klarkjs-implementation)
     - [Comparison](#comparison)
         - [Boilerplate Code](#boilerplate-code)
-        - [Reative Path Avoidance](#reative-path-avoidance)
+        - [Relative Path Avoidance](#relative-path-avoidance)
         - [Code Guidance](#code-guidance)
 - [API](#api)
     - [run\(\[config\]\)](#runconfig)
         - [config](#config)
+    - [KlarkJS Controller Function](#klarkjs-controller-function)
+        - [Internal Dependencies](#internal-dependencies)
+        - [External Dependencies](#external-dependencies)
+        - [Return Value](#return-value)
     - [KlarkAPI](#klarkapi)
         - [getModule\(name\)](#getmodulename)
         - [getInternalModule\(name\)](#getinternalmodulename)
@@ -54,9 +58,9 @@ KlarkModule(module, 'myModuleName1', function($nodeModule1, myModuleName2) {
 
 `KlarkModule` is a global function provided by KlarkJS in order to register a module. The module registration requires 3 parameters.
 
-1. The NodeJS native module
+1. The NodeJS native [module](https://nodejs.org/api/modules.html#modules_the_module_object)
 2. The name of the module
-3. The module's controller
+3. The module's [controller](#klarkjs-controller-function)
 
 The dependencies of the module are defined by the controller parameter names. The names of the modules are always camel case and the external modules (`node_modules`) are always prefixed by `$`.
 
@@ -65,7 +69,6 @@ The dependencies of the module are defined by the controller parameter names. Th
 On the following excerpts we depict a simple NodeJS application in pure NodeJS modules and a NodeJS application in KlarkJS. We will observe the simplicity and the minimalism that KlarkJS provides.
 
 ### Pure NodeJS implementation
-
 
 ```javascript
 /////////////////////
@@ -211,7 +214,7 @@ In pure NodeJS version, when we want to use an external dependency, we have to r
 
 In KlarkJS version, we define the dependency only once, as the parameter of the function.
 
-#### Reative Path Avoidance
+#### Relative Path Avoidance
 
 ```javascript
 // pure NodeJS
@@ -237,14 +240,14 @@ klark.run();
 
 ### run([config])
 
-Starts the Klark engine. Briefly, it loads the files, creates the modules dependencies, instantiates the modules.
+Starts the Klark engine. It loads the files, creates the modules dependencies, instantiates the modules.
 
-* `config` `{Object}`, (optionally)
-* return `Promise<KlarkAPI>`
+* `config` | `{Object}` | (optionally)
+* return | `Promise<KlarkAPI>`
 
 #### config
 
-* `predicateFilePicker`, `Function -> Array<string>`. A function that returns the file path patterns that the modules are located. [Read more about the file patterns](https://github.com/sindresorhus/globby#globbing-patterns). Default:
+* `predicateFilePicker` | `Function -> Array<string>` | A function that returns the file path patterns that the modules are located. [Read more about the file patterns](https://github.com/sindresorhus/globby#globbing-patterns). Default:
 ```javascript
 predicateFilePicker: function() {
   return [
@@ -253,15 +256,15 @@ predicateFilePicker: function() {
   ];
 }
 ```
-* `globalRegistrationModuleName`, `String`. The name of the global function that registers the KlarkJS modules. Default: `KlarkModule`.
-* `globalConfigurationName`, `String`. The name of the global object that holds the KlarkJS configuration. Default: `KlarkConfig`.
-* `base`, 'String'. The root location of the application. The `predicateFilePicker` search for files under the `base` folder. Default: `process.cwd()`
-* `logLevel`, `String`. The verbose level of KlarkJS logging. When we want to debug the module loading process, we can yield the logger on `high` and observe the sequence of loading. It is enumerated by:
+* `globalRegistrationModuleName` | `String` | The name of the global function that registers the KlarkJS modules. Default: `KlarkModule`.
+* `globalConfigurationName` | `String` | The name of the global object that holds the KlarkJS configuration. Default: `KlarkConfig`.
+* `base` | `String` | The root location of the application. The `predicateFilePicker` search for files under the `base` folder. Default: `process.cwd()`.
+* `logLevel` | `String` | The verbose level of KlarkJS logging. When we want to debug the module loading process, we can yield the logger on `high` and observe the sequence of loading. It is enumerated by:
     - high
     - middle
     - low
     - off (Default)
-* `moduleAlias`, `Object<String, String>`. Alias name for the modules. If you provide an alias name for a module, you can either refer to it with the original name, or the alias name. For instance, we will could take a look on the Default object:
+* `moduleAlias` | `Object<String, String>` | Alias name for the modules. If you provide an alias name for a module, you can either refer to it with the original name, or the alias name. For instance, we will could take a look on the Default object:
 ```javascript
 moduleAlias: {
   '_': 'lodash'
@@ -269,11 +272,46 @@ moduleAlias: {
 ```
 When we define the alias name we can either refer on external library lodash either using the name `'lodash'`
 ```
-KlarkModule(module, '..', function(lodash) {
+KlarkModule(module, '..', function($lodash) {
 ```
 or `'_'`
 ```
 KlarkModule(module, '..', function(_) {
+```
+
+### KlarkJS Controller Function
+
+```javascript
+KlarkModule(module, 'myModule1', function($lodash, myModule2, $simpleNodeLogger) {
+    return {
+        doSomething: function() { return 'something'; }
+    };
+});
+```
+
+The KlarkJS function controller is the third argument on the KlarkModule registration. The argument names of the controller defines the dependencies.
+
+#### Internal Dependencies
+
+The internal dependencies should consist of camel case string. The name matches directly the name of the dependency module. In our case, if our argument variable is `myModule2`, the KlarkJS will search for the `myModule2` module. If the `myModule2` does not exists, an error will be thrown.
+
+#### External Dependencies
+
+We define the external dependencies with the prefix `$`. This way separates the external with the internal dependencies. The KlarkJS engine translate the real name from the argument and searches on the node_modules to find the package. An error will be thrown if the package does not exists. The name resolution process is the following:
+
+|Argument|Real Name|
+|---|---|
+|$lodash|lodash|
+|$simpleNodeLogger|simple-node-logger|
+
+#### Return Value
+
+A KlarkJS module instance is the result of the return value of the controller function. It is somehow similar on the `module.exports`. For example, the instance of the KlarkJS module 'myModule1' will be the object:
+
+```javascript
+{
+    doSomething: function() { return 'something'; }
+}
 ```
 
 ### KlarkAPI
@@ -387,7 +425,7 @@ klark.run({
 ## KlarkJS Development
 
 * `npm test`. Runs the tests located on `/test` folder.
-* `npm run coverage`. Runs the test coverage tool and extraxts the results on `/coverage` folder.
+* `npm run coverage`. Runs the test coverage tool and extracts the results on `/coverage` folder.
 
 ## References
 
