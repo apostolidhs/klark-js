@@ -2,6 +2,8 @@
 
 A package management system based on Plugins and dependency injection for NodeJS applications.
 
+![Klark JS](/doc/klark.png "Klark JS")
+
 KlarkJS is a novel system for NodeJS module dependency management that handles the creation of the modules, resolves their internal and external dependencies, and provides them to other modules.
 
 It works with dependency injection based on function parameters in order to define the components dependencies. This architecture decreases dramatically the boiler plate code of an ordinary NodeJS application.
@@ -403,7 +405,7 @@ KlarkModule(module, 'dbMongooseConnectorTest', function($chai, $_, dbMongooseCon
 
 describe('dbMongooseConnector', function() {
     it('Should provide a connect function', function() {
-        expect($$_.isFunction(dbMongooseConnector.connect)).to.equal(true);
+        expect($$_.isFunction($$dbMongooseConnector.connect)).to.equal(true);
     });
 });
 ```
@@ -415,7 +417,7 @@ klark.run({
     predicateFilePicker: function() {
         var files = ['plugins/**/index.js'];
         if (isTesting) {
-            files.concat('plugins/**/*-test.js');
+            files = files.concat('plugins/**/*-test.js');
         }
         return files;
     }
