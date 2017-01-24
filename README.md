@@ -1,6 +1,13 @@
 # KlarkJS
 
-A package management system based on Plugins and dependency injection for NodeJS applications.
+Module loader (plugin system) based on dependency injection for NodeJS applications.
+
+Forget the
+
+* relative paths
+* *require()* boilerplate code
+* large-scale project entropy
+* unorganized NodeJS structure
 
 ![Klark JS](/doc/klark.png "Klark JS")
 
@@ -40,6 +47,7 @@ We inspired from 2 main tools:
         - [injectInternalModuleFromFilepath\(filepath\)](#injectinternalmodulefromfilepathfilepath)
         - [injectExternalModule\(name\)](#injectexternalmodulename)
         - [getApplicationDependenciesGraph\(\)](#getapplicationdependenciesgraph)
+- [Plugin System](#plugin-system)
 - [Unit Tests](#unit-tests)
 - [KlarkJS Development](#klarkjs-development)
 - [References](#references)
@@ -349,14 +357,16 @@ Creates and inserts in the internal dependency chain a new module with the name 
 
 #### injectInternalModuleFromFilepath(filepath)
 
-Creates and inserts in the internal dependency chain a new module from the file on `filepath`. The content of the file file should follow the KlarkJS module registration pattern.
+Creates and inserts in the internal dependency chain a new module from the file on `filepath`.
+The content of the file file should follow the KlarkJS module registration pattern.
 
 * `filepath` `String`. The filepath of the file.
 * return: `Promise<ModuleInstance>`
 
 #### injectExternalModule(name)
 
-Creates and inserts in the external dependency chain a new module with the name `moduleName`. This module should already exists in the external dependencies (*nome_modules*)
+Creates and inserts in the external dependency chain a new module with the name `moduleName`.
+This module should already exists in the external dependencies (*nome_modules*)
 
 * `name` `String`. The name of the module.
 * return: the instance of the module.
@@ -383,9 +393,18 @@ Returns the internal and external dependencies of the application's modules in a
 }
 ```
 
+## Plugin System
+
+We can take advantage of the injection API methods and plug-in modules on the fly.
+Those modules can either be loaded from a file in the file system, or from a pure JS function.
+
 ## Unit Tests
 
-From the bibliography, there are many ways to structure the unit testing process. We will Follow a common used pattern that works fine on a large-scale source code tree. We will try to test each plugin separately. In order to accomplish the isolated testing, we will create at least one testing file on each plugin. For instance, our `/plugins/db/mongoose-connector/` folder could consists from the following files:
+From the bibliography, there are many ways to structure the unit testing process.
+We will Follow a common used pattern that works fine on a large-scale source code tree.
+Essentially, we will test each plugin separately. In order to accomplish the isolated testing,
+we will create at least one testing file on each plugin. For instance, our `/plugins/db/mongoose-connector/`
+folder could consists from the following files:
 
 * `index.js`, that contains the functionality of mongoose-connector.
 * `index-test.js`, that tests the `index.js` functionality.
@@ -410,7 +429,10 @@ describe('dbMongooseConnector', function() {
 });
 ```
 
-For consistency all the unit testing files should postfixed by the `-test` name. If we follow the above pattern, we can easily modify the KlarkJS `predicateFilePicker` (@see [config](#config)), to exclude the `-test` files when we run the application, and include the `-test` files when we are testing the application.
+For consistency all the unit testing files should postfixed by the `-test` name.
+If we follow the above pattern, we can easily modify the KlarkJS `predicateFilePicker`
+(@see [config](#config)), to exclude the `-test` files when we run the application,
+and include the `-test` files when we are testing the application.
 
 ```javascript
 klark.run({

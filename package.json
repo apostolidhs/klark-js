@@ -1,7 +1,7 @@
 {
   "name": "klark-js",
-  "version": "1.0.2",
-  "description": "Plugin dependency injection system for nodejs applications",
+  "version": "1.0.3",
+  "description": "Module loader (plugin system) based on dependency injection for NodeJS applications",
   "main": "index",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/apostolidhs/klark-js.git"
   },
-  "keywords": [],
+  "keywords": ["dependency injection", "plugins", "module loader", "module bundler", "structure"],
   "author": "John Apostolidis <john.apostolidi@gmail.com>",
   "license": "MIT",
   "bugs": {
