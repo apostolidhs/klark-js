@@ -20,6 +20,8 @@ We inspired from 2 main tools:
 - Angular 1 dependency injection
 - Architect js package management
 
+> npm install --save klark-js
+
 ## Table of Contents
 
 <!-- MarkdownTOC depth=4 autolink=true bracket=round -->
