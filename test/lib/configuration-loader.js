@@ -7,12 +7,12 @@ var configurationLoader = require('../../lib/configuration-loader');
 describe('Configuration loader', function() {
 
   it('Should properly load the default configuration', function() {
-    const config = configurationLoader();
+    var config = configurationLoader();
     expect(config.predicateFilePicker()).to.deep.equal(['plugins/**/index.js', 'plugins/**/*.module.js']);
   });
 
   it('Should properly load the custom configuration', function() {
-    const config = configurationLoader({
+    var config = configurationLoader({
       globalRegistrationModuleName: 'myModuleSystem',
       globalConfigurationName: 'myModuleConfig',
     });

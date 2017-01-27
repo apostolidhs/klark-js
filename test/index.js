@@ -6,3 +6,4 @@ require('./lib/create-modules-dependency-model');
 require('./lib/topological-graph-sort-and-modules-resolve');
 require('./lib/instantiate-modules');
 require('./lib/klark-api');
+require('./lib/klark');

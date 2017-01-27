@@ -21,12 +21,13 @@ describe('Resolve modules dependency model', function() {
   });
 
   it('Should identify the cycle graph', function(cb) {
-    const model = {
+    var model = {
       internalDependencyNamesGraph: {
         a: ['b'],
         b: ['c', 'v', 'q'],
         q: ['a']
-      }
+      },
+      internalDependencies: ['a', 'b', 'q', 'c', 'v']
     };
     expectPrms.fail(
       resolveModulesDependencyModel(model), function(reason) {
@@ -37,18 +38,20 @@ describe('Resolve modules dependency model', function() {
   });
 
   it('Should successfully resolve a middle-level graph', function(cb) {
-    const model = {
+    var result = ['a', 'b', 'q', 'm', 'v', '1', '2', 'w', 'o', 'c', 'z'];
+    var model = {
       internalDependencyNamesGraph: {
         a: ['b', 'q'],
         m: ['w', '1', '2', 'o', 'v'],
         b: ['c', 'v', 'q'],
         q: ['z', 'm'],
         v: ['1', '2']
-      }
+      },
+      internalDependencies: result
     };
     expectPrms.success(
       resolveModulesDependencyModel(model), function(ModulesDependencyModel) {
-        expect(ModulesDependencyModel.sortedInnerModules).to.deep.equal(['a', 'b', 'q', 'm', 'v', '1', '2', 'w', 'o', 'c', 'z']);
+        expect(ModulesDependencyModel.sortedInnerModules).to.deep.equal(result);
       },
       cb
     );

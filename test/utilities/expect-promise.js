@@ -12,10 +12,13 @@ module.exports = {
 function success(prms, predicateFunc, done) {
   checkArguments.apply(undefined, arguments);
   prms.then(function() {
-    predicateFunc.apply(undefined, arguments);  
+    predicateFunc.apply(undefined, arguments);
     done();
   })
-  .catch(done);
+  .catch(function(msg) {
+    console.error(msg, _.get(msg, 'stack'));
+    done(msg);
+  });
 }
 
 function fail(prms, predicateFunc, done) {
@@ -24,15 +27,18 @@ function fail(prms, predicateFunc, done) {
     done('Should throw an error');
   })
   .catch(function(reason) {
-    predicateFunc.apply(undefined, arguments);  
-    done();      
+    predicateFunc.apply(undefined, arguments);
+    done();
   })
-  .catch(done);
+  .catch(function(msg) {
+    console.log(msg);
+    done(msg);
+  });
 }
 
 function invalidParameters(prms, done) {
   fail(prms, function(reason) {
-    expect(reason + '').to.contain('Invalid parameters'); 
+    expect(reason + '').to.contain('Invalid parameters');
   }, done);
 }
 
