@@ -36,6 +36,7 @@ describe('Logger', function() {
     logger.setLogLevel('off');
     logger.high('hi');
     expect(true).to.equal(true);
+    logger.setLoggerDecorator();
   });
 
   it('Should assert on error', function() {

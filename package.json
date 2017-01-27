@@ -1,6 +1,6 @@
 {
   "name": "klark-js",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Module loader (plugin system) based on dependency injection for NodeJS applications",
   "main": "index",
   "scripts": {
