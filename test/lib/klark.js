@@ -6,7 +6,7 @@ var klark = require('../../lib/klark');
 
 describe('Klark', function() {
 
-  it('Should properly include 1 orphan dependencies', function(cb) {
+  it('Should include 1 orphan dependencies', function(cb) {
     var klarkPrms =  klark.run({
       predicateFilePicker: function() {
         return ['test/samples/orphan-plugins/1/**/*.js'];
@@ -18,7 +18,7 @@ describe('Klark', function() {
     }, cb);
   });
 
-  it('Should properly include 3 orphan dependencies', function(cb) {
+  it('Should include 3 orphan dependencies', function(cb) {
     var klarkPrms =  klark.run({
       predicateFilePicker: function() {
         return ['test/samples/orphan-plugins/3/**/*.js'];
@@ -27,6 +27,20 @@ describe('Klark', function() {
     expectPrms.success(klarkPrms, function(klarkApi) {
       var innerModules = _.keys(klarkApi.getApplicationDependenciesGraph());
       expect(innerModules).to.deep.equal(['a', 'b', 'c']);
+    }, cb);
+  });
+
+  it('Should load module with configured module/config name', function(cb) {
+    delete global['KlarkModule'];
+    var klarkPrms =  klark.run({
+      predicateFilePicker: function() {
+        return ['test/samples/klark-configured-names-changed/**/*.js'];
+      },
+      globalRegistrationModuleName : 'MyModule'
+    });
+    expectPrms.success(klarkPrms, function(klarkApi) {
+      var a = klarkApi.getInternalModule('a');
+      expect(!a).to.equal(false);
     }, cb);
   });
 
