@@ -11,12 +11,10 @@ describe('Configuration loader', function() {
     expect(config.predicateFilePicker()).to.deep.equal(['plugins/**/index.js', 'plugins/**/*.module.js']);
   });
 
-  it('Should properly load the custom configuration', function() {
+  it('Should properly load the custom module name', function() {
     var config = configurationLoader({
-      globalRegistrationModuleName: 'myModuleSystem',
-      globalConfigurationName: 'myModuleConfig',
+      globalRegistrationModuleName: 'myModuleSystem'
     });
     expect(_.isFunction(myModuleSystem)).to.equal(true);
-    expect(_.isObject(myModuleConfig)).to.equal(true);
   });
 });
