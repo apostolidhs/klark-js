@@ -3,7 +3,7 @@
 Module loader (plugin system) based on dependency injection for NodeJS applications.
 
 Forget the
- 
+
 * relative paths
 * *require()* boilerplate code
 * large-scale project entropy
