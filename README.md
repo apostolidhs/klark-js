@@ -3,7 +3,7 @@
 Module loader (plugin system) based on dependency injection for NodeJS applications.
 
 Forget the
-
+ 
 * relative paths
 * *require()* boilerplate code
 * large-scale project entropy
@@ -49,6 +49,7 @@ We inspired from 2 main tools:
         - [injectInternalModuleFromFilepath\(filepath\)](#injectinternalmodulefromfilepathfilepath)
         - [injectExternalModule\(name\)](#injectexternalmodulename)
         - [getApplicationDependenciesGraph\(\)](#getapplicationdependenciesgraph)
+        - [config](#config-1)
 - [Plugin System](#plugin-system)
 - [Unit Tests](#unit-tests)
 - [KlarkJS Development](#klarkjs-development)
@@ -269,7 +270,6 @@ predicateFilePicker: function() {
 }
 ```
 * `globalRegistrationModuleName` | `String` | The name of the global function that registers the KlarkJS modules. Default: `KlarkModule`.
-* `globalConfigurationName` | `String` | The name of the global object that holds the KlarkJS configuration. Default: `KlarkConfig`.
 * `base` | `String` | The root location of the application. The `predicateFilePicker` search for files under the `base` folder. Default: `process.cwd()`.
 * `logLevel` | `String` | The verbose level of KlarkJS logging. When we want to debug the module loading process, we can yield the logger on `high` and observe the sequence of loading. It is enumerated by:
     - high
@@ -394,6 +394,10 @@ Returns the internal and external dependencies of the application's modules in a
     ]
 }
 ```
+
+#### config
+
+Access the klark [configuration object](#config)
 
 ## Plugin System
 
