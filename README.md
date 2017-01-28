@@ -1,5 +1,10 @@
 # KlarkJS
 
+[![npm version](https://img.shields.io/npm/v/klark-js.svg)](https://www.npmjs.com/package/klark-js)
+[![Build Status](https://img.shields.io/travis/apostolidhs/klark-js.svg)](https://travis-ci.org/apostolidhs/klark-js)
+[![CircleCI](https://circleci.com/gh/apostolidhs/klark-js/tree/master.svg?style=shield)](https://circleci.com/gh/apostolidhs/klark-js/tree/master)
+[![Coverage Status](https://img.shields.io/coveralls/apostolidhs/klark-js/master.svg?style=flat)](https://coveralls.io/github/apostolidhs/klark-js?branch=master)
+
 Module loader (plugin system) based on dependency injection for NodeJS applications.
 
 Forget the
