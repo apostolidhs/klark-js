@@ -44,4 +44,15 @@ describe('Klark', function() {
     }, cb);
   });
 
+  it('Should find missing dependencies', function(cb) {
+    var klarkPrms =  klark.run({
+      predicateFilePicker: function() {
+        return ['test/samples/missing-dependencies/**/*.js'];
+      }
+    });
+    expectPrms.fail(klarkPrms, function(reason) {
+      expect(reason + '').to.contain('The module \'b\' that is required on (a) does not exist');
+    }, cb);
+  });
+
 });

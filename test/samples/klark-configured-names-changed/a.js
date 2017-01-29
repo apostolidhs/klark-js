@@ -1,4 +1,4 @@
-MyModule(module, 'a', function($_, b) {
+MyModule(module, 'a', function(_, b) {
   return {
     log: 'a'
   };
