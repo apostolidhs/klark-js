@@ -280,13 +280,13 @@ predicateFilePicker: function() {
     - middle
     - low
     - off (Default)
-* `moduleAlias` | `Object<String, String>` | Alias name for the modules. If you provide an alias name for a module, you can either refer to it with the original name, or the alias name. For instance, we will could take a look on the Default object:
+* `moduleAlias` | `Object<String, String>` | Alias name for the modules. If you provide an alias name for a module, you can either refer to it with the original name, or the alias name. For instance, we could take a look on the Default object:
 ```javascript
 moduleAlias: {
-  '_': 'lodash'
+  '_': '$lodash'
 }
 ```
-When we define the alias name we can either refer on external library lodash either using the name `'lodash'`
+When we define the alias name, we can either refer on external library with the name `_` or `$lodash`
 ```
 KlarkModule(module, '..', function($lodash) {
 ```
@@ -318,6 +318,7 @@ We define the external dependencies with the prefix `$`. This way separates the 
 |Argument|Real Name|
 |---|---|
 |$lodash|lodash|
+|_ (*using alias*)|lodash|
 |$simpleNodeLogger|simple-node-logger|
 
 #### Return Value
@@ -350,7 +351,7 @@ Searches on the internal modules.
 
 Searches on the external modules.
 
-* `name` `String`. The name of the module.
+* `name` `String`. The name of the module. String format: [external Dependencies](#external-dependencies).
 * return: the instance of the module.
 
 #### injectInternalModuleFromMetadata(moduleName, controller)
@@ -366,7 +367,7 @@ Creates and inserts in the internal dependency chain a new module with the name 
 Creates and inserts in the internal dependency chain a new module from the file on `filepath`.
 The content of the file file should follow the KlarkJS module registration pattern.
 
-* `filepath` `String`. The filepath of the file.
+* `filepath` `String`. The filepath of the file, `absolute` path is required. Keep in mind that `config.base` contains the application's root folder.
 * return: `Promise<ModuleInstance>`
 
 #### injectExternalModule(name)
@@ -374,7 +375,7 @@ The content of the file file should follow the KlarkJS module registration patte
 Creates and inserts in the external dependency chain a new module with the name `moduleName`.
 This module should already exists in the external dependencies (*nome_modules*)
 
-* `name` `String`. The name of the module.
+* `name` `String`. The name of the module. String format: [external Dependencies](#external-dependencies).
 * return: the instance of the module.
 
 #### getApplicationDependenciesGraph()
