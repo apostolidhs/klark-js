@@ -51,7 +51,6 @@ describe('Normal plugins', function() {
     expectPrms.success(klarkPrms, function(klarkApi) {
       var externalPromiseBefore = klarkApi.getExternalModule('$promise');
       expect(externalPromiseBefore).to.equal(undefined);
-      console.log('here');
       var promise = klarkApi.injectExternalModule('$promise');
       expect(_.isFunction(promise.resolve)).to.equal(true);
       var externalPromiseAfter = klarkApi.getExternalModule('$promise');
