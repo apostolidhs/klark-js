@@ -15,7 +15,7 @@ Forget the
 
 ![Klark JS](/doc/klark.png "Klark JS")
 
-KlarkJS is a novel system for NodeJS module dependency management that handles the creation of the modules, resolves their internal and external dependencies, and provides them to other modules.
+**KlarkJS** is a novel system for NodeJS module dependency management that handles the creation of the modules, resolves their internal and external dependencies, and provides them to other modules.
 
 It works with dependency injection based on function parameters in order to define the components dependencies. This architecture decreases dramatically the boiler plate code of an ordinary NodeJS application.
 
@@ -459,8 +459,8 @@ klark.run({
 
 ## KlarkJS Development
 
-* `npm test`. Runs the tests located on `/test` folder.
-* `npm run coverage`. Runs the test coverage tool and extracts the results on `/coverage` folder.
+* `npm test`. Runs the tests located on `/test` folder, creates a test coverage report on `/coverage` folder and send it on [coveralls.io](https://coveralls.io).
+* `npm run unit-test`. Merely runs the tests.
 
 ## References
 
