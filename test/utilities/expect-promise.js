@@ -43,7 +43,7 @@ function invalidParameters(prms, done) {
 }
 
 function checkArguments(prms, predicateFunc, done) {
-  if (!(_.isObject(prms) && _.isFunction(done) && _.isFunction(predicateFunc))) {
+  if (!(_.isObject(prms) && _.isFunction(predicateFunc) && _.isFunction(done))) {
     throw new Error('Invalid Arguments');
   }
 }

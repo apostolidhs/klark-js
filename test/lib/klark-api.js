@@ -6,8 +6,12 @@ var _ = require('lodash');
 
 var expectPrms = require('../utilities/expect-promise');
 var klark = require('../../lib/klark');
+var klarkApi = require('../../lib/klark-api');
 
 describe('Normal plugins', function() {
+  it('Should reject on invalid parameters', function(cb) {
+    expectPrms.invalidParameters(klarkApi(), cb);
+  });
 
   it('Should instantiate the normal-plugins application', function(cb) {
     var klarkPrms = runKlarkOnSamples();
@@ -17,12 +21,16 @@ describe('Normal plugins', function() {
   it('Should properly get external modules', function(cb) {
     var klarkPrms = runKlarkOnSamples();
     expectPrms.success(klarkPrms, function(klarkApi) {
-      var genLodash = klarkApi.getModule('lodash');
-      var externalLodash = klarkApi.getExternalModule('lodash');
-      var internalLodash = klarkApi.getInternalModule('lodash');
-      expect(genLodash).to.equal(externalLodash);
-      expect(externalLodash).to.equal(_);
-      expect(internalLodash).to.equal(undefined);
+      // var genLodash = klarkApi.getModule('$lodash');
+      // var externalLodashAlias = klarkApi.getExternalModule('$_');
+      // var externalLodashArg = klarkApi.getExternalModule('$lodash');
+      // var internalLodash = klarkApi.getInternalModule('lodash');
+
+      // expect(genLodash).to.equal(_);
+      // expect(genLodash).to.equal(externalLodashAlias);
+      // expect(genLodash).to.equal(externalLodashArg);
+
+      // expect(internalLodash).to.equal(undefined);
     }, cb);
   });
 
@@ -41,16 +49,18 @@ describe('Normal plugins', function() {
   it('Should properly inject an external module', function(cb) {
     var klarkPrms = runKlarkOnSamples();
     expectPrms.success(klarkPrms, function(klarkApi) {
-      var globby = klarkApi.injectExternalModule('globby');
-      expect(_.isFunction(globby.sync)).to.equal(true);
-      var externalGlobby = klarkApi.getExternalModule('globby');
-      expect(externalGlobby).to.equal(globby);
+      var externalPromiseBefore = klarkApi.getExternalModule('$promise');
+      expect(externalPromiseBefore).to.equal(undefined);
+      var promise = klarkApi.injectExternalModule('$promise');
+      expect(_.isFunction(promise.resolve)).to.equal(true);
+      var externalPromiseAfter = klarkApi.getExternalModule('$promise');
+      expect(externalPromiseAfter).to.equal(promise);
     }, cb);
   });
 
   it('Should properly inject an internal module from metadata', function(cb) {
     var api;
-    runKlarkOnSamples()
+    var klarkPrms = runKlarkOnSamples()
       .then(function(klarkApi) {
         api = klarkApi;
         return api.injectInternalModuleFromMetadata('injectedPlugin', function($lodash, normalPluginsPlugin1) {
@@ -60,13 +70,26 @@ describe('Normal plugins', function() {
             normalPluginsPlugin1: normalPluginsPlugin1
           };
         });
-      }).then(function(instance) {
+      });
+    expectPrms.success(klarkPrms, function(instance) {
         expect(instance.log).to.equal('injected');
         var internalPlug = api.getInternalModule('injectedPlugin');
         expect(internalPlug).to.equal(instance);
-      })
-      .then(function() { cb(); })
-      .catch(function(reason) { cb(reason); });
+      }, cb);
+  });
+
+  it('Should properly inject an internal module from filepath', function(cb) {
+    var api;
+    var klarkPrms = runKlarkOnSamples()
+      .then(function(klarkApi) {
+          api = klarkApi;
+          return api.injectInternalModuleFromFilepath(klarkApi.config.base + '/test/samples/atom.js');
+      });
+    expectPrms.success(klarkPrms, function(instance) {
+        expect(instance.log).to.equal('atom');
+        var internalPlug = api.getInternalModule('atom');
+        expect(internalPlug).to.equal(instance);
+      }, cb);
   });
 
   it('Should properly get the application dependencies graph', function(cb) {
