@@ -89,10 +89,10 @@ On the following excerpts we depict a simple NodeJS application in pure NodeJS m
 
 ```javascript
 /////////////////////
-// ./app.js
+// ./app/app.js
 var express = require('express');
 var mongoose = require('mongoose');
-var config = require('./config');
+var config = require('../config');
 
 var db = mongoose.connect(config.MONGODB_URL);
 var app = express();
@@ -112,7 +112,7 @@ module.exports = {
 
 /////////////////////
 // ./index.js
-require('./app');
+require('./app/app.js');
 ```
 
 ### KlarkJS implementation
@@ -171,10 +171,10 @@ In KlarkJS version, we define the dependency only once, as the parameter of the 
 
 ```javascript
 // pure NodeJS
-var mongooseConnector = require('./db/mongoose-connector.js');
+var config = require('../config.js');
 
 // Kark JS
-KlarkModule(module, 'app', function(dbMongooseConnector) { ...
+KlarkModule(module, 'app', function(config) { ...
 ```
 
 In pure NodeJS version, we define the internal dependencies using the relative path from the current file location to the dependency's file location. This pattern generates an organization issue. When our source files increases, and we want to change the location of a file, we have to track all the files that depends on the this file, and change the relative path.
@@ -359,19 +359,19 @@ folder could consists from the following files:
 Example of `index-test.js`:
 
 ```javascript
-var $$dbMongooseConnector;
+var $$config;
 var $$_;
 var expect;
 
-KlarkModule(module, 'dbMongooseConnectorTest', function($chai, _, dbMongooseConnector) {
-  $$dbMongooseConnector = dbMongooseConnector;
+KlarkModule(module, 'configTest', function($chai, _, config) {
+  $$config = config;
   $$_ = _;
   expect = $chai.expect;
 });
 
-describe('dbMongooseConnector', function() {
-    it('Should provide a connect function', function() {
-        expect($$_.isFunction($$dbMongooseConnector.connect)).to.equal(true);
+describe('config', function() {
+    it('Should configure a port', function() {
+        expect($$_.isNumber($$config.PORT)).to.equal(true);
     });
 });
 ```
