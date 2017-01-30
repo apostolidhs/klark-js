@@ -91,55 +91,23 @@ On the following excerpts we depict a simple NodeJS application in pure NodeJS m
 /////////////////////
 // ./app.js
 var express = require('express');
+var mongoose = require('mongoose');
 var config = require('./config');
-var mongooseConnector = require('./db/mongoose-connector.js');
 
+var db = mongoose.connect(config.MONGODB_URL);
 var app = express();
 app.get('/', function(req, res){
-    mongooseConnector.connect(function(db) {
-        db.collection('myCollection').find().toArray(function(err, items) {
-            res.send(items);
-        });
+    db.collection('myCollection').find().toArray(function(err, items) {
+        res.send(items);
     });
 });
 app.listen(config.PORT);
 
 /////////////////////
-// /db/mongoose-connector.js
-var mongoose = require('mongoose');
-var logger = require('./logger');
-var config = require('./config');
-
-module.exports = {
-    connect: connect
-};
-
-var connected = false;
-function connect(cb) {
-    if (connected) {
-        cb($mongoose.connection);
-        return;
-    }
-    mongoose.connect(config.MONGODB_URL);]
-    db.once('open', function() {
-      logger.log('connected');
-      connected = true;
-      cb(mongoose.connection);
-    });
-}
-
-/////////////////////
-// ./logger.js
-module.exports = {
-    log: function() { console.log.apply(console, arguments); },
-    error: function() { console.error.apply(console, arguments); }
-};
-
-/////////////////////
 // ./config.js
 module.exports = {
     MONGODB_URL: 'mongodb://localhost:27017/my-db',
-    POST: 3000
+    PORT: 3000
 };
 
 /////////////////////
@@ -152,47 +120,15 @@ require('./app');
 ```javascript
 /////////////////////
 // /plugins/app/index.js
-KlarkModule(module, 'app', function($express, config, dbMongooseConnector) {
+KlarkModule(module, 'app', function($express, $mongoose, config) {
+    var db = $mongoose.connect(config.MONGODB_URL);
     var app = $express();
     app.get('/', function(req, res){
-        dbMongooseConnector.connect(function(db) {
-            db.collection('myCollection').find().toArray(function(err, items) {
-                res.send(items);
-            });
+        db.collection('myCollection').find().toArray(function(err, items) {
+            res.send(items);
         });
     });
     app.listen(config.PORT);
-});
-
-/////////////////////
-// /plugins/db/mongoose-connector/index.js
-KlarkModule(module, 'dbMongooseConnector', function($mongoose, logger, config) {
-    var connected = false;
-    return {
-        connect: connect
-    };
-
-    function connect(cb) {
-        if (connected) {
-            cb($mongoose.connection);
-            return;
-        }
-        $mongoose.connect(config.MONGODB_URL);]
-        db.once('open', function() {
-          logger.log('connected');
-          connected = true;
-          cb($mongoose.connection);
-        });
-    }
-});
-
-/////////////////////
-// /plugins/logger/index.js
-KlarkModule(module, 'logger', function() {
-    return {
-        log: function() { console.log.apply(console, arguments); },
-        error: function() { console.error.apply(console, arguments); }
-    };
 });
 
 /////////////////////
@@ -200,7 +136,7 @@ KlarkModule(module, 'logger', function() {
 KlarkModule(module, 'config', function() {
     return {
         MONGODB_URL: 'mongodb://localhost:27017/my-db',
-        POST: 3000
+        PORT: 3000
     };
 });
 
@@ -427,9 +363,9 @@ var $$dbMongooseConnector;
 var $$_;
 var expect;
 
-KlarkModule(module, 'dbMongooseConnectorTest', function($chai, $_, dbMongooseConnector) {
+KlarkModule(module, 'dbMongooseConnectorTest', function($chai, _, dbMongooseConnector) {
   $$dbMongooseConnector = dbMongooseConnector;
-  $$_ = $_;
+  $$_ = _;
   expect = $chai.expect;
 });
 
