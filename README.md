@@ -359,23 +359,30 @@ folder could consists from the following files:
 Example of `index-test.js`:
 
 ```javascript
-var $$config;
-var $$_;
+var config;
+var _;
 var expect;
 
-KlarkModule(module, 'configTest', function($chai, _, config) {
-  $$config = config;
-  $$_ = _;
+KlarkModule(module, 'configTest', function($chai, ___, _config_) {
+  config = _config_;
+  _ = ___;
   expect = $chai.expect;
 });
 
 describe('config', function() {
     it('Should configure a port', function() {
-        expect($$_.isNumber($$config.PORT)).to.equal(true);
+        expect(_.isNumber(config.PORT)).to.equal(true);
     });
 });
 ```
 
+**Underscore notation**
+We support the underscore notation (e.g.: _config_) to keep the variable names clean in your tests.
+Hence, we strips out the leading and the trailing underscores
+when matching the parameters. The underscore rule applies only
+if the name starts and ends with exactly one underscore, otherwise no replacing happens.
+
+**Name**
 For consistency all the unit testing files should postfixed by the `-test` name.
 If we follow the above pattern, we can easily modify the KlarkJS `predicateFilePicker`
 (@see [config](#config)), to exclude the `-test` files when we run the application,
