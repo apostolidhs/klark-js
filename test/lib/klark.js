@@ -55,4 +55,23 @@ describe('Klark', function() {
     }, cb);
   });
 
+  it('Should include dependencies with underscore', function(cb) {
+    var klarkPrms =  klark.run({
+      predicateFilePicker: function() {
+        return ['test/samples/underscore-names/**/*.js'];
+      },
+      logLevel: 'high'
+    });
+    expectPrms.success(klarkPrms, function(klarkApi) {
+      var a = klarkApi.getInternalModule('a');
+      var _a = klarkApi.getInternalModule('_a_');
+      var lodash = klarkApi.getExternalModule('$lodash');
+      var _lodash = klarkApi.getExternalModule('_$lodash_');
+      expect(a).to.equal(_a);
+      expect(!a).to.equal(false);
+      expect(lodash).to.equal(_lodash);
+      expect(!lodash).to.equal(false);
+    }, cb);
+  });
+
 });
